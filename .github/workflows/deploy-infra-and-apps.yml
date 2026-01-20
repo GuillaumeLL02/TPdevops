@@ -4,8 +4,9 @@ env:
   AZURE_RG_NAME: rg-${{ vars.PROJECT_NAME }}-${{ vars.AZURE_RESOURCE_IDENTIFIER }}
 
 permissions:
-  id-token: write    
-  contents: read      
+  # Require write permission to Fetch an OIDC token (required for federated credential) and write it
+  # It will be automatically used on actions / cli that needs it
+  id-token: write  
   
 jobs:
   deploy_infrastructure:
