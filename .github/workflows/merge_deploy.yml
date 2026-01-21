@@ -35,7 +35,7 @@ jobs:
       uses: actions/checkout@v4
 
 
-    - name: Run linting script
+    - name: Run Linting Script
       run: npm run lint
       working-directory: ./frontend
 
@@ -60,7 +60,7 @@ jobs:
     - name: Build le dotnet
       run: dotnet build --configuration Release
       working-directory: ./backend
-      
+
     - name: Publish the app
       run: dotnet publish -c Release --property:PublishDir=publish # Publish the app to the API project publish folder
       working-directory: ./backend # Specify where to find the solution file in repository
