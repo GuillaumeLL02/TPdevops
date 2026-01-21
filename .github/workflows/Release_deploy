@@ -1,0 +1,46 @@
+on:
+  Release:
+
+
+  workflow_dispatch:
+
+env: 
+  AZURE_RG_NAME: rg-${{ vars.PROJECT_NAME }}-${{ vars.AZURE_RESOURCE_IDENTIFIER }}
+
+permissions:
+  id-token: write  
+  
+jobs:
+
+  CI-part:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build the app
+      run: npm install && npm run build
+      working-directory: ./frontend  
+      
+    - name: Run Linting script
+      run: npm run lint
+      working-directory: ./frontend
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET SDK 9.0.x
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+    
+    - name: Build le dotnet
+      run: dotnet build --configuration Release
+      working-directory: ./backend
+      
+    - name: Publish the app
+      run: dotnet publish -c Release --property:PublishDir=publish # Publish the app to the API project publish folder
+      working-directory: ./backend # Specify where to find the solution file in repository
