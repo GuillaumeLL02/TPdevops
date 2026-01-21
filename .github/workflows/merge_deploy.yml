@@ -13,21 +13,8 @@ permissions:
   id-token: write  
   
 jobs:
-  deploy_infrastructure:
+  check_frontend:
     runs-on: ubuntu-latest
-    environment: production
-
-    outputs:
-      appServiceName: ${{ steps.bicep_deploy.outputs.appServiceName }}
-      staticWebAppName: ${{ steps.bicep_deploy.outputs.staticWebAppName }}
-    
-    steps: 
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-  deploy_frontend:
-    runs-on: ubuntu-latest
-    needs: deploy_infrastructure
     environment: production
 
     steps:
@@ -42,9 +29,8 @@ jobs:
       run: npm run lint
       working-directory: ./frontend
 
-  deploy_backend:
+  check_backend:
     runs-on: ubuntu-latest
-    needs: deploy_infrastructure
     environment: production
 
     steps:
