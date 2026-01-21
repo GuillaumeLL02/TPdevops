@@ -44,6 +44,11 @@ jobs:
       run: dotnet publish -c Release --property:PublishDir=publish # Publish the app to the API project publish folder
       working-directory: ./backend # Specify where to find the solution file in repository
 
+    - name: Upload backend artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-publish
+        path: backend/publish
 
     - name: Upload frontend artifact
       uses: actions/upload-artifact@v4
@@ -123,9 +128,14 @@ jobs:
         skip_app_build: true
         skip_api_build: true
             
-      
+    - name: Download backend artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: backend-publish
+        path: backend/publish
+          
     - name: Deploy backend to App Service
       uses: azure/webapps-deploy@v2
       with: 
-        app-name: ${{ needs.deploy_infrastructure.outputs.appServiceName }} # Access to the previous job output to get the appServiceName deployed with bicep
-        package: ./backend/ParkNDeploy.Api/publish # Path to the previously published app
+        app-name: ${{ needs.deploy_infrastructure.outputs.appServiceName }}
+        package: backend/publish
