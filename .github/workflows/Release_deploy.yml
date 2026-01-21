@@ -1,5 +1,7 @@
 on:
-  Release:
+  push:
+    tags:
+      - v1.*
 
 
   workflow_dispatch:
@@ -27,10 +29,6 @@ jobs:
     - name: Run Linting script
       run: npm run lint
       working-directory: ./frontend
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
     
     - name: Setup .NET SDK 9.0.x
       uses: actions/setup-dotnet@v4
